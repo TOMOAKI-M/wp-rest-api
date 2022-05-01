@@ -1,0 +1,166 @@
+@use "variable" as *;
+@use "sass:map";
+
+// メディアクエリ
+
+@mixin mq( $maxmin, $breakpoint ) {
+    @if map.has-key($breakpoints, $breakpoint) {
+        @if $maxmin == min {
+            @media (min-width: map.get( $breakpoints, $breakpoint ) + 1px) {
+                @content;
+            }
+        } @else if $maxmin == max {
+            @media (max-width: map.get( $breakpoints, $breakpoint ) * 1px) {
+                @content;
+            }
+        }
+    } @else {
+        @media (#{$maxmin}-width: $breakpoint * 1px) {
+            @content;
+        }
+    }
+}
+
+@mixin mq02( $min_breakpoint, $max_breakpoint ) {
+    @if map.has-key($breakpoints, $min_breakpoint) and map.has-key($breakpoints, $max_breakpoint) {
+        @media (min-width: map.get( $breakpoints, $min_breakpoint ) + 1px) and (max-width: map.get( $breakpoints, $max_breakpoint ) * 1px) {
+            @content;
+        }
+    } @else if map.has-key($breakpoints, $min_breakpoint) == false and map.has-key($breakpoints, $max_breakpoint) {
+        @media (min-width: $min_breakpoint * 1px) and (max-width: map.get( $breakpoints, $max_breakpoint ) * 1px) {
+            @content;
+        }
+    } @else if map.has-key($breakpoints, $min_breakpoint) and map.has-key($breakpoints, $max_breakpoint) == false {
+        @media (min-width: map.get( $breakpoints, $min_breakpoint ) + 1px) and (max-width: $max_breakpoint * 1px ) {
+            @content;
+        }
+    } @else {
+        @media (min-width: $min_breakpoint * 1px) and (max-width: $max_breakpoint * 1px) {
+            @content;
+        }
+    }
+}
+
+// 中央配置　上下
+@mixin abs-tb {
+    position: absolute;
+	bottom: 50%;
+    transform: translateY(50%);
+}
+
+// 中央配置　左右
+@mixin abs-lr {
+    position: absolute;
+	right: 50%;
+    transform: translateX(50%);
+}
+
+// 中央配置　上下左右
+@mixin abs-tblr {
+    position: absolute;
+    bottom: 50%;
+    right: 50%;
+    transform: translate(50%, 50%);
+}
+
+// グラデーション $orientation = horizontal →, vertical ↓, diagonal-bottom ↘, diagonal-top ↗
+@mixin color-gd( $start-color, $end-color, $orientation: horizontal ) {
+    $direction01: right;
+    $direction02: left;
+    @if $orientation == horizontal {
+        $direction01: right;
+        $direction02: left;
+    } @else if $orientation == vertical {
+        $direction01: bottom;
+        $direction02: top;
+    } @else if $orientation == diagonal-bottom {
+        $direction01: 135deg;
+        $direction02: -45deg;
+    } @else if $orientation == diagonal-top {
+        $direction01: 45deg;
+        $direction02: 45deg;
+    }
+    background: $start-color;
+	background: -moz-linear-gradient($direction02, $start-color 0%, $end-color 100%);
+	background: -webkit-linear-gradient($direction02, $start-color 0%, $end-color 100%);
+	background: linear-gradient(to $direction01, $start-color 0%, $end-color 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$start-color+'', endColorstr=$end-color+'',GradientType=1 );
+}
+
+// フォントグラデーション $orientation = horizontal →, vertical ↓
+@mixin font-color-gd( $start-color, $end-color, $orientation: horizontal ) {
+    $deg: 0deg;
+    @if $orientation == vertical {
+        $deg: -90deg;
+    }
+
+    color: $start-color;//非対応のブラウザでの文字色を設定
+    background: -webkit-linear-gradient($deg, $start-color, $end-color);//背景色にグラデーションを指定
+    -webkit-background-clip: text;//テキストでくり抜く
+    -webkit-text-fill-color: transparent;//くり抜いた部分は背景を表示
+    display: inline-block;
+}
+
+// 三角形 $direction = top ▲, left ◀ , bottom ▼, right ▶
+@mixin triangle( $width, $height, $color, $direction) {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    @if ($direction == top) {
+        border-width: 0 calc(#{$width} / 2) #{$height} calc(#{$width} / 2);
+        border-color: transparent transparent $color transparent;
+    } @else if ($direction == right) {
+        border-width: calc(#{$height} / 2) 0 calc(#{$height} / 2) #{$width};
+        border-color: transparent transparent transparent $color;
+    } @else if ($direction == bottom) {
+        border-width: #{$height} calc(#{$width} / 2) 0 calc(#{$width} / 2);
+        border-color: $color transparent transparent transparent
+    } @else if ($direction == left) {
+        border-width: calc(#{$height} / 2) #{$width}calc(#{$height} / 2) 0;
+        border-color: transparent $color transparent transparent;
+    }
+}
+
+// くの字矢印 $direction = top ▲, left ▶, bottom ▼, right ◀
+@mixin arrow($width, $color, $direction, $bold) {
+    border-color: $color;
+    border-style: solid;
+    border-width: 0 #{$bold} #{$bold} 0;
+    height: #{$width};
+    vertical-align: middle;
+    width: #{$width};
+    @if ($direction == 'left') {
+        transform: rotate(135deg);
+    }
+    @else if ($direction == 'top') {
+        transform: rotate(225deg);
+    }
+    @else if ($direction == 'right') {
+        transform: rotate(-45deg);
+    }
+    @else if ($direction == 'bottom') {
+        transform: rotate(45deg);
+    }
+}
+
+
+// 列
+@mixin col($column: 2, $margin-side: 16px, $margin-top: 16px, $flex-direction: row, $align-items: flex-start) {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    flex-direction: $flex-direction;
+
+    > * {
+        width: calc((100% - (#{$margin-side} * (#{$column} - 1))) / #{$column});
+
+        &:not(:nth-of-type(#{$column}n)) {
+            margin-right: #{$margin-side};
+        }
+
+        &:not(:nth-of-type(-n+#{$column})) {
+            margin-top: #{$margin-top};
+        }
+    }
+}

@@ -1,0 +1,55 @@
+//////////////
+// 基本設定 //
+/////////////
+
+// 画面幅
+$pc: 1919;
+$ct: 1279;
+$tb: 767;
+$sp: 414; //iphoneX plus
+
+// ブレイクポイント
+$breakpoints: (
+    pc: $pc,
+    ct: $ct,
+    tb: $tb,
+    sp: $sp,
+);
+
+
+// サイトカラー
+$color1: #191B18;
+$color2: #FFF;
+$color3: #0000ff;
+$color4: #FF0000;
+
+
+// body
+$body_color: $color2;
+
+// コンテンツエリア
+$ct_padding: (
+    pc: 40px,
+    sp: 16px,
+);
+
+
+/////////////////
+// テキスト設定 //
+/////////////////
+
+// ベーステキストカラー
+$base_text_color: $color1;
+
+// リンクテキストカラー
+$link_text_color: $color3;
+
+// line-hight
+$base_lineHight: 1.5;
+
+// フォントサイズ
+$base_fontSize: 16;
+
+// font-family
+//$base_font: "游ゴシック Medium", "游ゴシック体", "Yu Gothic Medium", YuGothic, "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+$base_font: serif;

@@ -1,0 +1,15 @@
+
+/*$webfont: (
+	Oswald: (Bold, ExtraLight, Light, Medium, Regular, SemiBold),
+	MPLUSRounded1c: (Black, Bold, ExtraBold, Light, Medium, Regular, Thin)
+);
+
+@each $font_name, $font_types in $webfont {
+	@each $font_type in $font_types {
+		@font-face {
+			font-family: '#{$font_name}-#{$font_type}';
+			src: url(/fonts/#{$font_name}/#{$font_name}-#{$font_type}.woff) format('woff');
+			font-display: swap;
+		}
+	}
+}*/

@@ -1,0 +1,12 @@
+@use "variable" as *;
+@use "sass:map";
+
+// px → vw
+@function vw($size, $width) {
+    $no_unit_size: $size / ($size * 0 + 1) ;
+    @if map.has-key($breakpoints, $width) {
+		@return (100 / map.get( $breakpoints, $width )) * $no_unit_size * 1vw;
+	} @else {
+		@return (100 / $width) * $no_unit_size * 1vw;
+    }
+}
